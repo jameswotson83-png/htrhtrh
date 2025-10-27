@@ -1,28 +1,36 @@
-# 1. Create a folder for the runner and navigate into it
-mkdir actions-runner
-cd actions-runner
+name: CI/CD Pipeline
 
-# 2. Download the latest runner package (REPLACE URL)
-curl -o actions-runner-linux-x64-2.316.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.316.0/actions-runner-linux-x64-2.316.0.tar.gz
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-# 3. Verify the download (Optional but recommended)
-echo "6f9479e0a0a09a5676b7b2521c7d242c748c0a87a20c32d3e9154a434190e24b  actions-runner-linux-x64-2.316.0.tar.gz" | shasum -a 256 --check
+jobs:
+  test_job:
+    runs-on: YOUR_RUNNER_LABEL
+    
+    steps:
+      - uses: actions/checkout@v4
+        
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install Pytest
+        run: pip install pytest
+          
+      - name: Run tests
+        run: pytest
 
-# 4. Extract the installer
-tar xzf actions-runner-linux-x64-2.316.0.tar.gz
+  deploy_job:
+    needs: test_job
+    runs-on: YOUR_RUNNER_LABEL
+    
+    steps:
+      - name: Deployment Script
+        run: |
+          echo "Deployment script is running directly on your Ubuntu VPS!"
+          # Add your deployment commands here
+          echo "Deployment finished."
 
-# 5. Configure the runner (REPLACE TOKEN)
-# This command will ask you a few questions:
-# - Enter the name of the runner group: [Default]
-# - Enter the name of the runner: [A unique name, e.g., my-ubuntu-vps]
-# - Enter the labels for the runner: [Default is 'self-hosted, Linux, x64'. You can add 'my-vps']
-./config.sh --url https://github.com/htrhtrh/Main.yml --token BZIQNP3COLVC3SPSXQPNWPDI75RPE
-
-# 6. Run the runner (Option A: Interactive)
-# This is for testing. The runner will stop when you close the SSH session.
-./run.sh
-
-# 7. Run the runner (Option B: Service - RECOMMENDED for persistence)
-# This sets up the runner as a background service that automatically starts on boot.
-sudo ./svc.sh install
-sudo ./svc.sh start
