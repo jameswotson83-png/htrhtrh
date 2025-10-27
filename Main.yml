@@ -16,7 +16,7 @@ tar xzf actions-runner-linux-x64-2.316.0.tar.gz
 # - Enter the name of the runner group: [Default]
 # - Enter the name of the runner: [A unique name, e.g., my-ubuntu-vps]
 # - Enter the labels for the runner: [Default is 'self-hosted, Linux, x64'. You can add 'my-vps']
-./config.sh --url https://github.com/YOUR_ORG/YOUR_REPO --token 
+./config.sh --url https://github.com/htrhtrh/Main.yml --token BZIQNP3COLVC3SPSXQPNWPDI75RPE
 
 # 6. Run the runner (Option A: Interactive)
 # This is for testing. The runner will stop when you close the SSH session.
